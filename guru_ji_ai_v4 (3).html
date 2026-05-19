@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Guru Ji AI Ultimate</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{ margin:0; padding:0; box-sizing:border-box; }
+body{ background:#090909; color:white; font-family:'Plus Jakarta Sans',sans-serif; min-height:100vh; }
+
+.header{
+  padding:18px 25px; border-bottom:1px solid #1f1f1f;
+  display:flex; align-items:center; gap:15px;
+  background:#111; position:sticky; top:0; z-index:999;
+}
+.logo{
+  width:54px; height:54px; border-radius:16px;
+  background:linear-gradient(135deg,#FF6B35,#ff9558);
+  display:flex; align-items:center; justify-content:center; font-size:28px;
+}
+.brand h1{ font-family:'Syne',sans-serif; font-size:26px; font-weight:800; color:#FF6B35; }
+.brand p{ font-size:13px; color:#777; margin-top:3px; }
+.header-right{ margin-left:auto; }
+.key-badge{
+  background:#1a1a1a; border:1px solid #333; color:#777;
+  padding:7px 14px; border-radius:20px; font-size:12px; cursor:pointer;
+  transition:.2s;
+}
+.key-badge:hover{ border-color:#FF6B35; color:#FF6B35; }
+.key-badge.connected{ border-color:#2d7a4f; color:#4ade80; background:#0f2a1a; }
+
+/* API Key Modal */
+.modal-overlay{
+  position:fixed; inset:0; background:rgba(0,0,0,.85);
+  display:flex; align-items:center; justify-content:center;
+  z-index:9999;
+}
+.modal{
+  background:#111; border:1px solid #2c2c2c;
+  border-radius:24px; padding:36px; max-width:500px; width:90%;
+  text-align:center;
+}
+.modal h2{ font-family:'Syne',sans-serif; color:#FF6B35; font-size:24px; margin-bottom:10px; }
+.modal p{ color:#777; font-size:14px; margin-bottom:20px; line-height:1.8; }
+.modal ol{ text-align:left; color:#aaa; font-size:14px; padding-left:20px; margin-bottom:20px; line-height:2; }
+.modal ol a{ color:#FF6B35; }
+.api-input{
+  width:100%; padding:14px 18px;
+  background:#1a1a1a; border:1px solid #333;
+  border-radius:14px; color:white; font-size:14px;
+  outline:none; margin-bottom:14px; font-family:monospace;
+}
+.api-input:focus{ border-color:#FF6B35; }
+
+.container{ max-width:980px; margin:auto; padding:22px 16px; }
+
+.upload-box{
+  min-height:360px; border:2px dashed #2c2c2c;
+  border-radius:28px; display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  text-align:center; gap:18px; background:#111;
+  transition:.25s; cursor:pointer;
+}
+.upload-box:hover{ border-color:#FF6B35; background:#161616; }
+.upload-box h2{ font-size:30px; font-family:'Syne',sans-serif; }
+.upload-box p{ color:#666; font-size:14px; }
+
+.main-btn{
+  background:linear-gradient(135deg,#FF6B35,#ff9558);
+  color:white; border:none; padding:14px 28px;
+  border-radius:60px; font-weight:800; font-size:15px;
+  cursor:pointer; transition:.2s;
+}
+.main-btn:hover{ opacity:.85; }
+.main-btn:disabled{ opacity:.5; cursor:not-allowed; }
+
+.top-bar{ display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:16px; }
+.reupload-btn{
+  background:#1f1f1f; border:1px solid #FF6B35;
+  color:#FF6B35; padding:10px 20px; border-radius:30px;
+  font-weight:700; font-size:14px; cursor:pointer; transition:.2s;
+}
+.reupload-btn:hover{ background:#FF6B35; color:white; }
+
+.pdf-info{
+  flex:1; background:#141414; border:1px solid #2c2c2c;
+  border-radius:14px; padding:10px 16px; font-size:13px; color:#888;
+}
+.pdf-info span{ color:#FF6B35; font-weight:700; }
+
+/* OCR Progress Bar */
+.ocr-progress{
+  background:#141414; border:1px solid #2c2c2c; border-radius:14px;
+  padding:14px 18px; margin-bottom:14px; display:none;
+}
+.ocr-progress-label{ font-size:13px; color:#aaa; margin-bottom:8px; }
+.ocr-bar-track{ background:#222; border-radius:10px; height:8px; overflow:hidden; }
+.ocr-bar-fill{
+  height:100%; width:0%; background:linear-gradient(90deg,#FF6B35,#ff9558);
+  border-radius:10px; transition:width 0.3s ease;
+}
+.ocr-status{ font-size:12px; color:#666; margin-top:6px; }
+
+.chat-box{
+  display:flex; flex-direction:column; gap:22px;
+  max-height:60vh; overflow-y:auto; padding-right:5px; margin-top:16px;
+}
+.msg{ display:flex; flex-direction:column; gap:8px; animation:fade .3s ease; }
+@keyframes fade{ from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+
+.ai-head{ display:flex; align-items:center; gap:10px; }
+.ai-avatar{
+  width:35px; height:35px; border-radius:12px;
+  background:linear-gradient(135deg,#FF6B35,#ff9558);
+  display:flex; align-items:center; justify-content:center;
+}
+.bubble{ padding:18px; line-height:1.8; font-size:15px; max-width:92%; }
+.ai-bubble{ background:#151515; border:1px solid #222; border-radius:0 20px 20px 20px; }
+.user-bubble{ background:#FF6B35; border-radius:20px 20px 0 20px; align-self:flex-end; }
+
+.quick-buttons{ display:flex; flex-wrap:wrap; gap:10px; margin-top:14px; }
+.quick-buttons button{
+  background:#161616; border:1px solid #2c2c2c;
+  color:#bbb; padding:10px 16px; border-radius:30px;
+  cursor:pointer; font-size:13px; transition:.2s;
+}
+.quick-buttons button:hover{ border-color:#FF6B35; color:#FF6B35; }
+
+.speak-btn{
+  background:#1f1f1f; border:1px solid #333;
+  color:#bbb; padding:5px 12px; border-radius:10px;
+  cursor:pointer; font-size:12px;
+}
+.input-box{
+  display:flex; gap:10px; margin-top:16px;
+  background:#111; border:1px solid #222; padding:10px; border-radius:18px;
+}
+.input-box input{
+  flex:1; background:transparent; border:none; outline:none; color:white; font-size:15px;
+}
+.send-btn{
+  width:50px; height:50px; border:none; border-radius:14px;
+  background:#FF6B35; color:white; font-size:20px; font-weight:800; cursor:pointer;
+}
+
+h1,h2,h3{ font-family:'Syne',sans-serif; color:#FF6B35; margin:14px 0 8px; }
+strong{ color:white; }
+ul,ol{ padding-left:20px; margin:8px 0; }
+li{ margin:5px 0; line-height:1.7; }
+
+.loader{ display:flex; gap:6px; padding:16px; }
+.dot{ width:9px; height:9px; background:#FF6B35; border-radius:50%; animation:pulse 1s infinite; }
+.dot:nth-child(2){ animation-delay:.2s }
+.dot:nth-child(3){ animation-delay:.4s }
+@keyframes pulse{ 0%,100%{opacity:.3;transform:scale(.8)} 50%{opacity:1;transform:scale(1)} }
+
+.error-box{
+  background:#1b1212; border-left:4px solid red;
+  padding:14px; border-radius:12px; color:#ff6b6b; line-height:1.8;
+}
+
+.info-box{
+  background:#0f1e14; border-left:4px solid #4ade80;
+  padding:12px 16px; border-radius:12px; color:#86efac; font-size:13px; line-height:1.8;
+  margin-bottom:12px;
+}
+
+/* ── History Drawer ──────────────────────────────── */
+.history-btn{
+  background:#1a1a1a; border:1px solid #333; color:#bbb;
+  padding:7px 14px; border-radius:20px; font-size:12px; cursor:pointer;
+  transition:.2s; display:flex; align-items:center; gap:6px;
+}
+.history-btn:hover{ border-color:#FF6B35; color:#FF6B35; }
+.history-badge{
+  background:#FF6B35; color:white; border-radius:50%;
+  width:18px; height:18px; font-size:10px; font-weight:800;
+  display:flex; align-items:center; justify-content:center;
+}
+
+.drawer-overlay{
+  position:fixed; inset:0; background:rgba(0,0,0,.7);
+  z-index:8888; opacity:0; pointer-events:none; transition:.3s;
+}
+.drawer-overlay.open{ opacity:1; pointer-events:all; }
+
+.history-drawer{
+  position:fixed; right:-420px; top:0; bottom:0; width:420px; max-width:95vw;
+  background:#0f0f0f; border-left:1px solid #2a2a2a;
+  z-index:8999; transition:right .35s cubic-bezier(.4,0,.2,1);
+  display:flex; flex-direction:column;
+}
+.history-drawer.open{ right:0; }
+
+.drawer-header{
+  padding:20px 22px; border-bottom:1px solid #1f1f1f;
+  display:flex; align-items:center; justify-content:space-between;
+  background:#111;
+}
+.drawer-header h3{ font-family:'Syne',sans-serif; color:#FF6B35; font-size:18px; }
+.drawer-close{
+  width:34px; height:34px; border-radius:10px;
+  background:#1f1f1f; border:1px solid #333;
+  color:#aaa; font-size:18px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  transition:.2s;
+}
+.drawer-close:hover{ background:#FF6B35; color:white; border-color:#FF6B35; }
+
+.drawer-filter{
+  padding:12px 18px; border-bottom:1px solid #1a1a1a;
+  display:flex; gap:8px; flex-wrap:wrap;
+}
+.filter-chip{
+  padding:5px 14px; border-radius:20px; font-size:12px; font-weight:600;
+  border:1px solid #2c2c2c; background:#161616; color:#888;
+  cursor:pointer; transition:.2s;
+}
+.filter-chip.active{ border-color:#FF6B35; color:#FF6B35; background:#1a0f09; }
+
+.drawer-search{
+  padding:10px 18px; border-bottom:1px solid #1a1a1a;
+}
+.drawer-search input{
+  width:100%; background:#161616; border:1px solid #2a2a2a;
+  color:white; padding:9px 14px; border-radius:12px;
+  outline:none; font-size:13px; font-family:'Plus Jakarta Sans',sans-serif;
+}
+.drawer-search input:focus{ border-color:#FF6B35; }
+.drawer-search input::placeholder{ color:#555; }
+
+.drawer-body{
+  flex:1; overflow-y:auto; padding:14px;
+  scrollbar-width:thin; scrollbar-color:#2a2a2a transparent;
+}
+
+.history-empty{
+  text-align:center; padding:50px 20px;
+  color:#555; font-size:14px; line-height:2;
+}
+.history-empty div{ font-size:48px; margin-bottom:12px; }
+
+.history-item{
+  background:#141414; border:1px solid #222;
+  border-radius:16px; padding:16px; margin-bottom:12px;
+  cursor:pointer; transition:.2s; position:relative;
+}
+.history-item:hover{ border-color:#FF6B35; background:#1a1209; }
+.history-item:hover .hi-replay{ opacity:1; }
+
+.hi-meta{
+  display:flex; align-items:center; gap:8px; margin-bottom:10px;
+}
+.hi-type{
+  font-size:10px; font-weight:700; padding:3px 10px;
+  border-radius:20px; letter-spacing:.5px;
+}
+.hi-type.pdf{ background:#1a0f09; color:#FF6B35; border:1px solid #3a1f0e; }
+.hi-type.general{ background:#0f1a2a; color:#60a5fa; border:1px solid #1e3a5a; }
+.hi-time{ font-size:11px; color:#555; margin-left:auto; }
+
+.hi-q{
+  font-size:13px; color:#ddd; font-weight:600; margin-bottom:8px;
+  line-height:1.5;
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+.hi-a{
+  font-size:12px; color:#666; line-height:1.6;
+  display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+
+.hi-replay{
+  position:absolute; top:12px; right:12px;
+  background:#FF6B35; color:white; border:none;
+  padding:5px 12px; border-radius:10px; font-size:11px; font-weight:700;
+  cursor:pointer; opacity:0; transition:.2s;
+}
+
+.drawer-footer{
+  padding:14px 18px; border-top:1px solid #1a1a1a;
+  display:flex; gap:10px;
+}
+.clear-btn{
+  flex:1; background:#1a1a1a; border:1px solid #333;
+  color:#888; padding:10px; border-radius:12px;
+  font-size:13px; cursor:pointer; transition:.2s; font-weight:600;
+}
+.clear-btn:hover{ border-color:red; color:#ff6b6b; background:#1a0a0a; }
+
+/* ── Mode Toggle ─────────────────────────────────── */
+.mode-toggle{
+  display:flex; gap:0; background:#161616; border:1px solid #2c2c2c;
+  border-radius:12px; overflow:hidden; margin-bottom:14px;
+}
+.mode-btn{
+  flex:1; padding:10px 14px; font-size:13px; font-weight:700;
+  border:none; background:transparent; color:#666; cursor:pointer;
+  transition:.2s; display:flex; align-items:center; justify-content:center; gap:6px;
+}
+.mode-btn.active{ background:#FF6B35; color:white; }
+.mode-btn:not(.active):hover{ color:#FF6B35; }
+</style>
+</head>
+<body>
+
+<!-- API Key Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div style="font-size:50px;margin-bottom:12px">🔑</div>
+    <h2>Enter Your Groq API Key</h2>
+    <p>Groq is completely <strong style="color:#4ade80">FREE</strong> and super fast!</p>
+    <ol>
+      <li>👉 <a href="https://couples009.github.io/GURU-JI-AI/" target="_blank"><strong>COPY THIS API KEY </strong></a>    OPEN IT </li>
+     <li>Copy the key and paste it below</li>
+    </ol>
+    <input class="api-input" id="apiKeyInput" type="password" placeholder="gsk_... (Paste your Groq API Key here)" onkeydown="if(event.key==='Enter')saveKey()">
+    <button class="main-btn" style="width:100%" onclick="saveKey()">✅ Save & Get Started</button>
+  </div>
+</div>
+
+<div class="header">
+  <div class="logo">🎓</div>
+  <div class="brand">
+    <h1>AI GURU JI</h1>
+    <p>made by--TANUSH 🔥</p>
+  </div>
+  <div class="header-right" style="display:flex;gap:10px;align-items:center">
+    <button class="history-btn" onclick="openHistory()">
+      🕐 History <span class="history-badge" id="historyCount">0</span>
+    </button>
+    <button class="key-badge connected" id="keyBadge" onclick="changeKey()">🟢 Groq Connected</button>
+  </div>
+</div>
+
+<!-- History Drawer -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeHistory()"></div>
+<div class="history-drawer" id="historyDrawer">
+  <div class="drawer-header">
+    <div>
+      <h3>📖 Chat History</h3>
+      <div style="font-size:12px;color:#555;margin-top:3px">Tumhare saare sawaal &amp; jawab</div>
+    </div>
+    <button class="drawer-close" onclick="closeHistory()">✕</button>
+  </div>
+  <div class="drawer-filter">
+    <button class="filter-chip active" onclick="filterHistory('all',this)">🔢 All</button>
+    <button class="filter-chip" onclick="filterHistory('pdf',this)">📄 PDF Questions</button>
+    <button class="filter-chip" onclick="filterHistory('general',this)">🌐 General</button>
+  </div>
+  <div class="drawer-search">
+    <input type="text" id="historySearch" placeholder="🔍 Search in history..." oninput="renderHistory()">
+  </div>
+  <div class="drawer-body" id="drawerBody">
+    <div class="history-empty">
+      <div>💬</div>
+      Abhi koi history nahi hai.<br>Koi sawaal poochho toh yahan dikhega!
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="clear-btn" onclick="clearHistory()">🗑️ Clear All History</button>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="upload-box" id="uploadBox" onclick="fileInput.click()">
+    <div style="font-size:70px">📚</div>
+    <h2>Upload Your PDF</h2>
+    <p>Normal PDF ✅ &nbsp;|&nbsp; Scanned / Camera PDF ✅ (OCR supported)</p>
+    <button class="main-btn" onclick="event.stopPropagation();fileInput.click()">📄 Choose PDF</button>
+  </div>
+
+  <div id="mainApp" style="display:none">
+    <div class="top-bar">
+      <div class="pdf-info" id="pdfInfo">📄 Loading...</div>
+      <button class="reupload-btn" onclick="reuploadPDF()">🔄 Upload New PDF</button>
+    </div>
+
+    <!-- OCR Progress -->
+    <div class="ocr-progress" id="ocrProgress">
+      <div class="ocr-progress-label">🔍 Scanned PDF detected — OCR in progress...</div>
+      <div class="ocr-bar-track"><div class="ocr-bar-fill" id="ocrBarFill"></div></div>
+      <div class="ocr-status" id="ocrStatus">Processing page 0 / 0...</div>
+    </div>
+
+    <button class="main-btn" id="explainBtn" onclick="explainPDF()">
+      🎓 Guru Ji Se Full Deep Explanation Lo
+    </button>
+
+    <div class="quick-buttons">
+      <button onclick="quickAsk(this)">🧠 Explain in simple English</button>
+      <button onclick="quickAsk(this)">🎯 What's important for exams?</button>
+      <button onclick="quickAsk(this)">📘 List all formulas and concepts</button>
+      <button onclick="quickAsk(this)">⚠️ Make important questions</button>
+      <button onclick="quickAsk(this)">📝 Give me a short revision</button>
+      <button onclick="quickAsk(this)">💡 Give real life examples</button>
+    </div>
+
+    <div class="chat-box" id="chatBox"></div>
+
+    <div class="mode-toggle">
+      <button class="mode-btn active" id="modePDF" onclick="setMode('pdf')">📄 PDF Mode</button>
+      <button class="mode-btn" id="modeGeneral" onclick="setMode('general')">🌐 General Mode</button>
+    </div>
+
+    <div class="input-box">
+      <input id="userInput" type="text" placeholder="PDF ke baare mein poochho..." onkeydown="if(event.key==='Enter')askQuestion()">
+      <button class="send-btn" onclick="askQuestion()">➤</button>
+    </div>
+  </div>
+
+</div>
+
+<input type="file" accept="application/pdf" id="fileInput" style="display:none">
+
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+let pdfText = "";
+let totalPages = 0;
+let GROQ_KEY = "";
+let currentMode = 'pdf';
+let historyFilter = 'all';
+let chatHistory = [];
+try { chatHistory = JSON.parse(localStorage.getItem('guru_history') || '[]'); } catch(e) {}
+
+// ─── History System ───────────────────────────────────────────────────────────
+function saveToHistory(question, answer, type) {
+  const entry = {
+    id: Date.now(),
+    question: question.substring(0, 500),
+    answer: answer.substring(0, 2000),
+    type: type || (pdfText ? 'pdf' : 'general'),
+    time: new Date().toLocaleString('en-IN', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' })
+  };
+  chatHistory.unshift(entry);
+  if (chatHistory.length > 100) chatHistory = chatHistory.slice(0, 100);
+  try { localStorage.setItem('guru_history', JSON.stringify(chatHistory)); } catch(e) {}
+  updateHistoryBadge();
+}
+
+function updateHistoryBadge() {
+  document.getElementById('historyCount').textContent = chatHistory.length;
+}
+
+function openHistory() {
+  document.getElementById('historyDrawer').classList.add('open');
+  document.getElementById('drawerOverlay').classList.add('open');
+  renderHistory();
+}
+
+function closeHistory() {
+  document.getElementById('historyDrawer').classList.remove('open');
+  document.getElementById('drawerOverlay').classList.remove('open');
+}
+
+function filterHistory(type, btn) {
+  historyFilter = type;
+  document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderHistory();
+}
+
+function renderHistory() {
+  const body = document.getElementById('drawerBody');
+  const searchVal = (document.getElementById('historySearch').value || '').toLowerCase().trim();
+  let items = chatHistory;
+  if (historyFilter !== 'all') items = items.filter(i => i.type === historyFilter);
+  if (searchVal) items = items.filter(i =>
+    i.question.toLowerCase().includes(searchVal) || i.answer.toLowerCase().includes(searchVal)
+  );
+  if (items.length === 0) {
+    body.innerHTML = '<div class="history-empty"><div>' + (searchVal ? '🔍' : '💬') + '</div>' + (searchVal ? 'Koi result nahi mila!' : 'Abhi koi history nahi hai.<br>Koi sawaal poochho toh yahan dikhega!') + '</div>';
+    return;
+  }
+  body.innerHTML = items.map(item => `
+    <div class="history-item">
+      <div class="hi-meta">
+        <span class="hi-type ${item.type}">${item.type === 'pdf' ? '📄 PDF' : '🌐 General'}</span>
+        <span class="hi-time">${item.time}</span>
+      </div>
+      <div class="hi-q">❓ ${escHtml(item.question)}</div>
+      <div class="hi-a">💬 ${escHtml((item.answer || '').replace(/<[^>]*>/g,'').replace(/[#*_]/g,''))}</div>
+      <button class="hi-replay" onclick="replayHistory(${item.id})">↩ Replay</button>
+    </div>
+  `).join('');
+}
+
+function replayHistory(id) {
+  const item = chatHistory.find(i => i.id == id);
+  if (!item) return;
+  closeHistory();
+  setTimeout(() => {
+    addMessage('user', item.question);
+    addMessage('assistant', item.answer);
+    document.getElementById('chatBox').scrollTop = 99999;
+  }, 350);
+}
+
+function clearHistory() {
+  if (!confirm('Poori history delete karein?')) return;
+  chatHistory = [];
+  try { localStorage.removeItem('guru_history'); } catch(e) {}
+  updateHistoryBadge();
+  renderHistory();
+}
+
+function escHtml(t) {
+  return (t || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ─── Mode Toggle ──────────────────────────────────────────────────────────────
+function setMode(mode) {
+  currentMode = mode;
+  document.getElementById('modePDF').classList.toggle('active', mode === 'pdf');
+  document.getElementById('modeGeneral').classList.toggle('active', mode === 'general');
+  const inp = document.getElementById('userInput');
+  inp.placeholder = mode === 'pdf'
+    ? '📄 PDF ke baare mein kuch poochho...'
+    : '🌐 Kuch bhi poochho — maths, science, history, GK, general knowledge...';
+}
+
+// ─── Key Management ───────────────────────────────────────────────────────────
+function saveKey() {
+  const k = document.getElementById('apiKeyInput').value.trim();
+  if (!k || k.length < 10) {
+    alert('❌ Please paste a valid API key!\n\nGo to console.groq.com/keys and copy your key.');
+    return;
+  }
+  GROQ_KEY = k;
+  try { localStorage.setItem('groq_key', k); } catch(e) {}
+  try { sessionStorage.setItem('groq_key', k); } catch(e) {}
+  document.getElementById('modalOverlay').style.display = 'none';
+  document.getElementById('keyBadge').className = 'key-badge connected';
+  document.getElementById('keyBadge').textContent = '🟢 Groq Connected';
+}
+
+function changeKey() {
+  document.getElementById('apiKeyInput').value = GROQ_KEY;
+  document.getElementById('modalOverlay').style.display = 'flex';
+}
+
+window.onload = () => {
+  let saved = null;
+  try { saved = localStorage.getItem('groq_key'); } catch(e) {}
+  if (!saved) { try { saved = sessionStorage.getItem('groq_key'); } catch(e) {} }
+  if (saved && saved.length > 10) {
+    GROQ_KEY = saved;
+    document.getElementById('modalOverlay').style.display = 'none';
+    document.getElementById('keyBadge').className = 'key-badge connected';
+    document.getElementById('keyBadge').textContent = '🟢 Groq Connected';
+  }
+  updateHistoryBadge();
+};
+
+// ─── PDF Upload ───────────────────────────────────────────────────────────────
+const fileInput = document.getElementById('fileInput');
+
+fileInput.addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  fileInput.value = '';
+
+  if (!GROQ_KEY) {
+    document.getElementById('modalOverlay').style.display = 'flex';
+    return;
+  }
+
+  document.getElementById('uploadBox').style.display = 'none';
+  document.getElementById('mainApp').style.display = 'block';
+  document.getElementById('chatBox').innerHTML = '';
+  document.getElementById('ocrProgress').style.display = 'none';
+  showLoader();
+
+  try {
+    const result = await extractPDFText(file);
+    pdfText = result.fullText;
+    totalPages = result.pages.length;
+    const usedOCR = result.usedOCR;
+    hideLoader();
+
+    document.getElementById('pdfInfo').innerHTML =
+      `📄 <span>${file.name}</span> — <span>${totalPages} pages</span> | <span>${pdfText.split(' ').length} words</span>${usedOCR ? ' | <span>🔍 OCR Used</span>' : ''}`;
+
+    addMessage('assistant', `# ✅ PDF Loaded Successfully!
+
+Hey there! 😄 I've read your **${file.name}** — **${totalPages} pages** done!${usedOCR ? '\n\n> 🔍 **This was a scanned/camera PDF**, so I used OCR to extract the text. Accuracy may vary slightly!' : ''}
+
+I will now help you with:
+- **Every topic** explained clearly (only from this PDF)
+- **Real-life examples** to make it easy
+- **Important exam points** highlighted
+- **Step-by-step** explanations like a teacher
+
+👇 Click a button below or ask me anything!`);
+
+  } catch (err) {
+    hideLoader();
+    document.getElementById('ocrProgress').style.display = 'none';
+    addMessage('assistant', `<div class="error-box">❌ Error reading PDF: ${err.message}</div>`);
+  }
+});
+
+function reuploadPDF() {
+  document.getElementById('uploadBox').style.display = 'flex';
+  document.getElementById('mainApp').style.display = 'none';
+  document.getElementById('chatBox').innerHTML = '';
+  document.getElementById('ocrProgress').style.display = 'none';
+  pdfText = ''; totalPages = 0;
+  fileInput.click();
+}
+
+// ─── PDF Text Extraction with Groq Vision OCR Fallback ───────────────────────
+async function extractPDFText(file) {
+  const arrayBuffer = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+
+  let pages = [], fullText = "";
+  let totalChars = 0;
+
+  // First pass: normal text extraction
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i);
+    const content = await page.getTextContent();
+    const text = content.items.map(item => item.str).join(' ').trim();
+    pages.push({ page: i, text, pageObj: page });
+    fullText += `\n\n=== PAGE ${i} ===\n${text}`;
+    totalChars += text.length;
+  }
+
+  // If avg chars/page < 80 → scanned/image PDF → use Groq Vision OCR
+  const isScanned = (totalChars / pdf.numPages) < 80;
+  if (!isScanned) return { pages, fullText, usedOCR: false };
+
+  // ── Groq Vision OCR (fast, parallel) ─────────────────────────────────────
+  const ocrEl = document.getElementById('ocrProgress');
+  const fillEl = document.getElementById('ocrBarFill');
+  const statusEl = document.getElementById('ocrStatus');
+  ocrEl.style.display = 'block';
+  hideLoader();
+
+  // Render all pages to JPEG base64
+  const pageImages = [];
+  for (let i = 1; i <= pdf.numPages; i++) {
+    statusEl.textContent = `Page ${i}/${pdf.numPages} rendering...`;
+    fillEl.style.width = `${Math.round(((i-1) / pdf.numPages) * 40)}%`;
+    const page = await pdf.getPage(i);
+    const viewport = page.getViewport({ scale: 1.8 });
+    const canvas = document.createElement('canvas');
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
+    await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+    pageImages.push(canvas.toDataURL('image/jpeg', 0.85).split(',')[1]);
+  }
+
+  // Send batches of 5 pages in parallel to Groq Vision
+  pages = []; fullText = "";
+  const BATCH = 5;
+  let done = 0;
+
+  for (let b = 0; b < pageImages.length; b += BATCH) {
+    const batch = pageImages.slice(b, b + BATCH);
+    const nums = batch.map((_, k) => b + k + 1);
+    statusEl.textContent = `Pages ${nums[0]}–${nums[nums.length-1]} / ${pdf.numPages} — Extracting text via Groq Vision... ⚡`;
+
+    const results = await Promise.all(batch.map((img, idx) =>
+      groqVisionOCR(img, nums[idx])
+    ));
+
+    results.forEach(({ pageNum, text }) => {
+      pages.push({ page: pageNum, text });
+      fullText += `\n\n=== PAGE ${pageNum} ===\n${text}`;
+      done++;
+      fillEl.style.width = `${Math.round(40 + (done / pdf.numPages) * 60)}%`;
+    });
+  }
+
+  ocrEl.style.display = 'none';
+  return { pages, fullText, usedOCR: true };
+}
+
+// Groq Vision OCR for a single page image
+async function groqVisionOCR(base64Jpeg, pageNum) {
+  try {
+    const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${GROQ_KEY}`
+      },
+      body: JSON.stringify({
+        model: "meta-llama/llama-4-scout-17b-16e-instruct",
+        max_tokens: 2048,
+        messages: [{
+          role: "user",
+          content: [
+            { type: "image_url", image_url: { url: `data:image/jpeg;base64,${base64Jpeg}` } },
+            { type: "text", text: "Extract ALL text from this image exactly as written. Preserve structure, headings, bullet points, and numbers. Output only the raw extracted text, nothing else." }
+          ]
+        }]
+      })
+    });
+    const data = await res.json();
+    return { pageNum, text: data.choices?.[0]?.message?.content?.trim() || "" };
+  } catch(e) {
+    return { pageNum, text: `[Page ${pageNum} OCR failed: ${e.message}]` };
+  }
+}
+
+// ─── Groq API ─────────────────────────────────────────────────────────────────
+const SYSTEM_PDF = `You are India's best tuition teacher — Guru Ji! You explain everything in simple, clear English from the PDF.
+
+LANGUAGE: Always respond in clear, simple English only.
+
+STYLE:
+- Use phrases like "Now listen carefully", "This is very important", "Let me explain this simply", "Great question!"
+- Give real-life Indian examples — cricket, chai, everyday situations, school life
+- Explain technical terms in plain English
+- ONLY explain content from the PDF — do not add outside topics
+
+FORMAT:
+- Use ## headings for each topic`;
+
+const SYSTEM_GENERAL = `You are Guru Ji — India's smartest AI teacher who can answer ANY question brilliantly!
+
+LANGUAGE: Always respond in clear, simple English only.
+
+YOUR ABILITIES:
+- Mathematics (arithmetic to calculus, step by step)
+- Science (Physics, Chemistry, Biology — with real examples)
+- History, Geography, Civics, GK, Current Affairs
+- English grammar, writing, literature
+- Computer Science, Coding (explain code line by line)
+- Reasoning, Puzzles, Logic
+- General knowledge — absolutely anything!
+- Career guidance, study tips
+- Translate/explain anything the student doesn't understand
+
+STYLE:
+- Use phrases like "Excellent question!", "Now listen carefully", "Let me make this crystal clear"
+- Give real-life Indian examples to explain concepts
+- Use analogies, stories, and relatable comparisons
+- Break complex topics into simple steps
+- For maths: show every step clearly
+- For coding: explain each line
+- Always be encouraging and motivating
+
+FORMAT:
+- Use ## headings for each section
+- Bold important points`;
+
+const SYSTEM = SYSTEM_PDF; // default, overridden in askAI
+
+async function askAI(userPrompt, mode) {
+  const systemPrompt = (mode === 'general') ? SYSTEM_GENERAL : SYSTEM_PDF;
+  const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${GROQ_KEY}`
+    },
+    body: JSON.stringify({
+      model: "llama-3.3-70b-versatile",
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userPrompt }
+      ],
+      max_tokens: 2048,
+      temperature: 0.7
+    })
+  });
+
+  const data = await res.json();
+
+  if (data.error) {
+    if (data.error.code === 'invalid_api_key') {
+      changeKey();
+      throw new Error('Invalid API Key! Please enter a valid key.');
+    }
+    throw new Error(data.error.message);
+  }
+
+  if (data.choices?.[0]?.message?.content) {
+    return data.choices[0].message.content;
+  }
+
+  throw new Error('No response received, please try again.');
+}
+
+
+// askAI defined above with mode support
+
+// ─── Explain Full PDF ─────────────────────────────────────────────────────────
+async function explainPDF() {
+  if (!pdfText.trim()) { alert("Please upload a PDF first!"); return; }
+
+  const btn = document.getElementById('explainBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Guru Ji is reading...';
+  showLoader();
+
+  const chunk = pdfText.substring(0, 12000);
+  const truncNote = pdfText.length > 12000 ? '\n\n[Explain up to here. User will ask specific questions for the rest.]' : '';
+
+  const prompt = `Below is the content from my PDF. Explain this content deeply like a teacher.
+
+RULES:
+- Only explain content from this PDF, don't add outside topics
+- Explain each section clearly with real-life examples
+- Explain formulas and definitions step by step
+- Highlight what is important for exams
+
+PDF CONTENT:
+${chunk}${truncNote}`;
+
+  try {
+    const response = await askAI(prompt, 'pdf');
+    hideLoader();
+    addMessage('assistant', response);
+    saveToHistory('Full PDF Explanation', response, 'pdf');
+  } catch (err) {
+    hideLoader();
+    addMessage('assistant', `<div class="error-box">❌ ${err.message}</div>`);
+  }
+
+  btn.disabled = false;
+  btn.textContent = '🎓 Guru Ji Se Full Deep Explanation Lo';
+}
+
+// ─── Ask Question ─────────────────────────────────────────────────────────────
+async function askQuestion() {
+  const input = document.getElementById('userInput');
+  const q = input.value.trim();
+  if (!q) return;
+  input.value = '';
+  addMessage('user', q);
+  showLoader();
+
+  let prompt, mode;
+
+  if (currentMode === 'general' || !pdfText.trim()) {
+    // General mode — answer anything smartly
+    mode = 'general';
+    prompt = `Student Question: ${q}
+
+Answer this question thoroughly like a great teacher. Show all steps for maths. Give examples. Be clear and helpful.`;
+  } else {
+    // PDF mode
+    mode = 'pdf';
+    const chunk = pdfText.substring(0, 10000);
+    prompt = `My PDF content:
+${chunk}
+
+---
+Student question: ${q}
+
+SMART RULE: 
+- If this question is about the PDF content → explain clearly using the PDF.
+- If this topic is partially in the PDF → use PDF + add relevant general knowledge to complete the answer.
+- If this is a completely general question (maths, science, GK) → answer it fully and helpfully as a teacher. Don't say "not in PDF" for clearly general topics like maths formulas or basic concepts.
+
+Explain like a friendly, knowledgeable teacher:`;
+  }
+
+  try {
+    const response = await askAI(prompt, mode);
+    hideLoader();
+    addMessage('assistant', response);
+    saveToHistory(q, response, mode);
+  } catch (err) {
+    hideLoader();
+    addMessage('assistant', `<div class="error-box">❌ ${err.message}</div>`);
+  }
+}
+
+function quickAsk(btn) {
+  document.getElementById('userInput').value = btn.innerText;
+  askQuestion();
+}
+
+// ─── UI Helpers ───────────────────────────────────────────────────────────────
+function addMessage(role, text) {
+  const box = document.getElementById('chatBox');
+  const msg = document.createElement('div');
+  msg.className = 'msg';
+  const id = 'msg_' + Date.now() + Math.random().toString(36).slice(2,6);
+
+  if (role === 'assistant') {
+    msg.innerHTML = `
+      <div class="ai-head">
+        <div class="ai-avatar">🎓</div>
+        <div style="font-size:13px;color:#FF6B35;font-weight:700">Guru Ji</div>
+        <button class="speak-btn" onclick="speakText(document.getElementById('${id}').innerText, this)">🔊 Suno</button>
+      </div>
+      <div class="bubble ai-bubble" id="${id}">${formatText(text)}</div>`;
+  } else {
+    msg.innerHTML = `<div class="bubble user-bubble">${text.replace(/</g,'&lt;')}</div>`;
+  }
+
+  box.appendChild(msg);
+  box.scrollTop = box.scrollHeight;
+}
+
+function formatText(t) {
+  return t
+    .replace(/^### (.*?)$/gm,'<h3>$1</h3>')
+    .replace(/^## (.*?)$/gm,'<h2>$1</h2>')
+    .replace(/^# (.*?)$/gm,'<h1>$1</h1>')
+    .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g,'<em>$1</em>')
+    .replace(/^(\d+)\. (.*?)$/gm,'<li>$2</li>')
+    .replace(/^[-•] (.*?)$/gm,'<li>$1</li>')
+    .replace(/\n\n/g,'<br><br>')
+    .replace(/\n/g,'<br>');
+}
+
+function showLoader() {
+  if (document.getElementById('loader')) return;
+  const box = document.getElementById('chatBox');
+  const div = document.createElement('div');
+  div.id = 'loader';
+  div.innerHTML = `<div class="loader"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
+}
+
+function hideLoader() {
+  const l = document.getElementById('loader');
+  if (l) l.remove();
+}
+
+// ─── Smart Bilingual Human-like Speech ───────────────────────────────────────
+let isSpeaking = false;
+
+function speakText(text, btnEl) {
+  if (isSpeaking) {
+    window.speechSynthesis.cancel();
+    isSpeaking = false;
+    document.querySelectorAll('.speak-btn').forEach(b => b.textContent = '🔊 Suno');
+    return;
+  }
+
+  window.speechSynthesis.cancel();
+  isSpeaking = true;
+  if (btnEl) btnEl.textContent = '⏹ Roko';
+
+  const cleaned = text
+    .replace(/[#*_`~]/g, '')
+    .replace(/[^\x00-\x7F\u0900-\u097F\s.,!?;:।]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  const sentences = cleaned.match(/[^.!?।]+[.!?।]+/g) || [cleaned];
+
+  function getVoice() {
+    const all = speechSynthesis.getVoices();
+    return all.find(v => v.lang === 'en-IN' && v.name.includes('Ravi'))
+      || all.find(v => v.lang === 'en-IN')
+      || all.find(v => v.lang === 'en-GB' && v.localService)
+      || all.find(v => v.lang.startsWith('en') && v.localService)
+      || all.find(v => v.lang.startsWith('en'))
+      || all[0];
+  }
+
+  let i = 0;
+
+  function speakNext() {
+    if (!isSpeaking || i >= sentences.length) {
+      isSpeaking = false;
+      document.querySelectorAll('.speak-btn').forEach(b => b.textContent = '🔊 Suno');
+      return;
+    }
+
+    const sentence = sentences[i].trim();
+    if (!sentence) { i++; speakNext(); return; }
+
+    const u = new SpeechSynthesisUtterance(sentence);
+
+    u.voice = getVoice();
+    u.lang  = 'en-IN';
+    u.rate  = 0.92;
+    u.pitch = 1.00;
+    u.volume = 1;
+
+    const pause = /[.!?।]$/.test(sentence.trim()) ? 180 : 80;
+
+    u.onend  = () => { i++; setTimeout(speakNext, pause); };
+    u.onerror = () => { i++; setTimeout(speakNext, 80); };
+
+    window.speechSynthesis.speak(u);
+  }
+
+  if (speechSynthesis.getVoices().length === 0) {
+    speechSynthesis.addEventListener('voiceschanged', speakNext, { once: true });
+  } else {
+    speakNext();
+  }
+}
+</script>
+</body>
+</html>
