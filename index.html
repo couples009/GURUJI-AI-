@@ -2,98 +2,105 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <title>Guru Ji AI Ultimate</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-*{ margin:0; padding:0; box-sizing:border-box; }
-body{ background:#090909; color:white; font-family:'Plus Jakarta Sans',sans-serif; min-height:100vh; }
+*{ margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body{ background:#090909; color:white; font-family:'Plus Jakarta Sans',sans-serif; min-height:100vh; overflow-x:hidden; }
 
+/* ── Header ── */
 .header{
-  padding:18px 25px; border-bottom:1px solid #1f1f1f;
-  display:flex; align-items:center; gap:15px;
+  padding:12px 14px; border-bottom:1px solid #1f1f1f;
+  display:flex; align-items:center; gap:10px;
   background:#111; position:sticky; top:0; z-index:999;
 }
 .logo{
-  width:54px; height:54px; border-radius:16px;
+  width:42px; height:42px; flex-shrink:0; border-radius:13px;
   background:linear-gradient(135deg,#FF6B35,#ff9558);
-  display:flex; align-items:center; justify-content:center; font-size:28px;
+  display:flex; align-items:center; justify-content:center; font-size:22px;
 }
-.brand h1{ font-family:'Syne',sans-serif; font-size:26px; font-weight:800; color:#FF6B35; }
-.brand p{ font-size:13px; color:#777; margin-top:3px; }
-.header-right{ margin-left:auto; }
+.brand h1{ font-family:'Syne',sans-serif; font-size:20px; font-weight:800; color:#FF6B35; }
+.brand p{ font-size:11px; color:#777; margin-top:1px; }
+.header-right{ margin-left:auto; display:flex; gap:7px; align-items:center; }
 .key-badge{
   background:#1a1a1a; border:1px solid #333; color:#777;
-  padding:7px 14px; border-radius:20px; font-size:12px; cursor:pointer;
-  transition:.2s;
+  padding:6px 11px; border-radius:20px; font-size:11px; cursor:pointer;
+  transition:.2s; white-space:nowrap;
 }
 .key-badge:hover{ border-color:#FF6B35; color:#FF6B35; }
 .key-badge.connected{ border-color:#2d7a4f; color:#4ade80; background:#0f2a1a; }
 
-/* API Key Modal */
+/* ── API Key Modal ── */
 .modal-overlay{
-  position:fixed; inset:0; background:rgba(0,0,0,.85);
+  position:fixed; inset:0; background:rgba(0,0,0,.88);
   display:flex; align-items:center; justify-content:center;
-  z-index:9999;
+  z-index:9999; padding:16px;
 }
 .modal{
   background:#111; border:1px solid #2c2c2c;
-  border-radius:24px; padding:36px; max-width:500px; width:90%;
+  border-radius:22px; padding:28px 22px; width:100%; max-width:420px;
   text-align:center;
 }
-.modal h2{ font-family:'Syne',sans-serif; color:#FF6B35; font-size:24px; margin-bottom:10px; }
-.modal p{ color:#777; font-size:14px; margin-bottom:20px; line-height:1.8; }
-.modal ol{ text-align:left; color:#aaa; font-size:14px; padding-left:20px; margin-bottom:20px; line-height:2; }
+.modal h2{ font-family:'Syne',sans-serif; color:#FF6B35; font-size:20px; margin-bottom:8px; }
+.modal p{ color:#777; font-size:13px; margin-bottom:16px; line-height:1.8; }
+.modal ol{ text-align:left; color:#aaa; font-size:13px; padding-left:18px; margin-bottom:18px; line-height:2; }
 .modal ol a{ color:#FF6B35; }
 .api-input{
-  width:100%; padding:14px 18px;
+  width:100%; padding:13px 16px;
   background:#1a1a1a; border:1px solid #333;
   border-radius:14px; color:white; font-size:14px;
-  outline:none; margin-bottom:14px; font-family:monospace;
+  outline:none; margin-bottom:12px; font-family:monospace;
 }
 .api-input:focus{ border-color:#FF6B35; }
 
-.container{ max-width:980px; margin:auto; padding:22px 16px; }
+/* ── Container ── */
+.container{ max-width:700px; margin:auto; padding:16px 12px; }
 
+/* ── Upload Box ── */
 .upload-box{
-  min-height:360px; border:2px dashed #2c2c2c;
-  border-radius:28px; display:flex; flex-direction:column;
+  min-height:300px; border:2px dashed #2c2c2c;
+  border-radius:24px; display:flex; flex-direction:column;
   align-items:center; justify-content:center;
-  text-align:center; gap:18px; background:#111;
-  transition:.25s; cursor:pointer;
+  text-align:center; gap:14px; background:#111;
+  transition:.25s; cursor:pointer; padding:24px 16px;
 }
-.upload-box:hover{ border-color:#FF6B35; background:#161616; }
-.upload-box h2{ font-size:30px; font-family:'Syne',sans-serif; }
-.upload-box p{ color:#666; font-size:14px; }
+.upload-box:hover,.upload-box:active{ border-color:#FF6B35; background:#161616; }
+.upload-box h2{ font-size:24px; font-family:'Syne',sans-serif; }
+.upload-box p{ color:#666; font-size:13px; }
 
 .main-btn{
   background:linear-gradient(135deg,#FF6B35,#ff9558);
-  color:white; border:none; padding:14px 28px;
+  color:white; border:none; padding:14px 26px;
   border-radius:60px; font-weight:800; font-size:15px;
-  cursor:pointer; transition:.2s;
+  cursor:pointer; transition:.2s; touch-action:manipulation;
 }
-.main-btn:hover{ opacity:.85; }
+.main-btn:active{ opacity:.8; transform:scale(.97); }
 .main-btn:disabled{ opacity:.5; cursor:not-allowed; }
 
-.top-bar{ display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:16px; }
+/* ── Top Bar ── */
+.top-bar{
+  display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:14px;
+}
 .reupload-btn{
   background:#1f1f1f; border:1px solid #FF6B35;
-  color:#FF6B35; padding:10px 20px; border-radius:30px;
-  font-weight:700; font-size:14px; cursor:pointer; transition:.2s;
+  color:#FF6B35; padding:9px 16px; border-radius:30px;
+  font-weight:700; font-size:13px; cursor:pointer; transition:.2s;
+  white-space:nowrap; touch-action:manipulation;
 }
-.reupload-btn:hover{ background:#FF6B35; color:white; }
-
+.reupload-btn:active{ background:#FF6B35; color:white; }
 .pdf-info{
-  flex:1; background:#141414; border:1px solid #2c2c2c;
-  border-radius:14px; padding:10px 16px; font-size:13px; color:#888;
+  flex:1; min-width:0; background:#141414; border:1px solid #2c2c2c;
+  border-radius:14px; padding:9px 13px; font-size:12px; color:#888;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
 }
 .pdf-info span{ color:#FF6B35; font-weight:700; }
 
-/* OCR Progress Bar */
+/* ── OCR Progress ── */
 .ocr-progress{
   background:#141414; border:1px solid #2c2c2c; border-radius:14px;
-  padding:14px 18px; margin-bottom:14px; display:none;
+  padding:13px 16px; margin-bottom:13px; display:none;
 }
 .ocr-progress-label{ font-size:13px; color:#aaa; margin-bottom:8px; }
 .ocr-bar-track{ background:#222; border-radius:10px; height:8px; overflow:hidden; }
@@ -103,54 +110,75 @@ body{ background:#090909; color:white; font-family:'Plus Jakarta Sans',sans-seri
 }
 .ocr-status{ font-size:12px; color:#666; margin-top:6px; }
 
+/* ── Chat Box ── */
 .chat-box{
-  display:flex; flex-direction:column; gap:22px;
-  max-height:60vh; overflow-y:auto; padding-right:5px; margin-top:16px;
+  display:flex; flex-direction:column; gap:18px;
+  max-height:55vh; overflow-y:auto; padding-right:3px; margin-top:14px;
+  -webkit-overflow-scrolling:touch;
 }
-.msg{ display:flex; flex-direction:column; gap:8px; animation:fade .3s ease; }
+.msg{ display:flex; flex-direction:column; gap:7px; animation:fade .3s ease; }
 @keyframes fade{ from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
 
-.ai-head{ display:flex; align-items:center; gap:10px; }
+.ai-head{ display:flex; align-items:center; gap:9px; }
 .ai-avatar{
-  width:35px; height:35px; border-radius:12px;
+  width:32px; height:32px; flex-shrink:0; border-radius:11px;
   background:linear-gradient(135deg,#FF6B35,#ff9558);
   display:flex; align-items:center; justify-content:center;
 }
-.bubble{ padding:18px; line-height:1.8; font-size:15px; max-width:92%; }
-.ai-bubble{ background:#151515; border:1px solid #222; border-radius:0 20px 20px 20px; }
-.user-bubble{ background:#FF6B35; border-radius:20px 20px 0 20px; align-self:flex-end; }
+.bubble{ padding:15px; line-height:1.75; font-size:14px; max-width:96%; }
+.ai-bubble{ background:#151515; border:1px solid #222; border-radius:0 18px 18px 18px; }
+.user-bubble{ background:#FF6B35; border-radius:18px 18px 0 18px; align-self:flex-end; font-size:14px; }
 
-.quick-buttons{ display:flex; flex-wrap:wrap; gap:10px; margin-top:14px; }
+/* ── Quick Buttons (horizontal scroll on mobile) ── */
+.quick-buttons{
+  display:flex; flex-wrap:nowrap; gap:9px; margin-top:13px;
+  overflow-x:auto; padding-bottom:6px;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+.quick-buttons::-webkit-scrollbar{ display:none; }
 .quick-buttons button{
   background:#161616; border:1px solid #2c2c2c;
-  color:#bbb; padding:10px 16px; border-radius:30px;
-  cursor:pointer; font-size:13px; transition:.2s;
+  color:#bbb; padding:10px 14px; border-radius:30px;
+  cursor:pointer; font-size:12px; transition:.2s;
+  white-space:nowrap; flex-shrink:0; touch-action:manipulation;
 }
-.quick-buttons button:hover{ border-color:#FF6B35; color:#FF6B35; }
+.quick-buttons button:active{ border-color:#FF6B35; color:#FF6B35; }
 
 .speak-btn{
   background:#1f1f1f; border:1px solid #333;
-  color:#bbb; padding:5px 12px; border-radius:10px;
-  cursor:pointer; font-size:12px;
+  color:#bbb; padding:5px 10px; border-radius:10px;
+  cursor:pointer; font-size:11px; touch-action:manipulation;
 }
+
+/* ── Input Box ── */
 .input-box{
-  display:flex; gap:10px; margin-top:16px;
-  background:#111; border:1px solid #222; padding:10px; border-radius:18px;
+  display:flex; gap:9px; margin-top:14px;
+  background:#111; border:1px solid #222; padding:8px; border-radius:16px;
+  position:sticky; bottom:0;
 }
 .input-box input{
   flex:1; background:transparent; border:none; outline:none; color:white; font-size:15px;
+  padding:6px 4px; min-width:0;
 }
 .send-btn{
-  width:50px; height:50px; border:none; border-radius:14px;
-  background:#FF6B35; color:white; font-size:20px; font-weight:800; cursor:pointer;
+  width:46px; height:46px; flex-shrink:0; border:none; border-radius:12px;
+  background:#FF6B35; color:white; font-size:18px; font-weight:800; cursor:pointer;
+  touch-action:manipulation; display:flex; align-items:center; justify-content:center;
 }
+.send-btn:active{ opacity:.8; transform:scale(.95); }
 
-h1,h2,h3{ font-family:'Syne',sans-serif; color:#FF6B35; margin:14px 0 8px; }
+/* ── Typography in answers ── */
+h1,h2,h3{ font-family:'Syne',sans-serif; color:#FF6B35; margin:12px 0 7px; }
+h1{ font-size:20px; }
+h2{ font-size:17px; }
+h3{ font-size:15px; }
 strong{ color:white; }
-ul,ol{ padding-left:20px; margin:8px 0; }
-li{ margin:5px 0; line-height:1.7; }
+ul,ol{ padding-left:18px; margin:7px 0; }
+li{ margin:4px 0; line-height:1.7; font-size:14px; }
 
-.loader{ display:flex; gap:6px; padding:16px; }
+/* ── Loader ── */
+.loader{ display:flex; gap:6px; padding:14px; }
 .dot{ width:9px; height:9px; background:#FF6B35; border-radius:50%; animation:pulse 1s infinite; }
 .dot:nth-child(2){ animation-delay:.2s }
 .dot:nth-child(3){ animation-delay:.4s }
@@ -158,25 +186,24 @@ li{ margin:5px 0; line-height:1.7; }
 
 .error-box{
   background:#1b1212; border-left:4px solid red;
-  padding:14px; border-radius:12px; color:#ff6b6b; line-height:1.8;
+  padding:13px; border-radius:12px; color:#ff6b6b; line-height:1.8; font-size:14px;
 }
-
 .info-box{
   background:#0f1e14; border-left:4px solid #4ade80;
-  padding:12px 16px; border-radius:12px; color:#86efac; font-size:13px; line-height:1.8;
-  margin-bottom:12px;
+  padding:11px 14px; border-radius:12px; color:#86efac; font-size:13px; line-height:1.8;
+  margin-bottom:11px;
 }
 
-/* ── History Drawer ──────────────────────────────── */
+/* ── History Drawer ── */
 .history-btn{
   background:#1a1a1a; border:1px solid #333; color:#bbb;
-  padding:7px 14px; border-radius:20px; font-size:12px; cursor:pointer;
-  transition:.2s; display:flex; align-items:center; gap:6px;
+  padding:6px 11px; border-radius:20px; font-size:11px; cursor:pointer;
+  transition:.2s; display:flex; align-items:center; gap:5px; white-space:nowrap;
 }
-.history-btn:hover{ border-color:#FF6B35; color:#FF6B35; }
+.history-btn:active{ border-color:#FF6B35; color:#FF6B35; }
 .history-badge{
   background:#FF6B35; color:white; border-radius:50%;
-  width:18px; height:18px; font-size:10px; font-weight:800;
+  width:16px; height:16px; font-size:10px; font-weight:800;
   display:flex; align-items:center; justify-content:center;
 }
 
@@ -186,75 +213,89 @@ li{ margin:5px 0; line-height:1.7; }
 }
 .drawer-overlay.open{ opacity:1; pointer-events:all; }
 
+/* Full-width bottom sheet on mobile */
 .history-drawer{
-  position:fixed; right:-420px; top:0; bottom:0; width:420px; max-width:95vw;
-  background:#0f0f0f; border-left:1px solid #2a2a2a;
-  z-index:8999; transition:right .35s cubic-bezier(.4,0,.2,1);
+  position:fixed; left:0; right:0; bottom:-100%; height:88vh;
+  background:#0f0f0f; border-top:1px solid #2a2a2a; border-radius:22px 22px 0 0;
+  z-index:8999; transition:bottom .35s cubic-bezier(.4,0,.2,1);
   display:flex; flex-direction:column;
 }
-.history-drawer.open{ right:0; }
+.history-drawer.open{ bottom:0; }
+
+/* On larger screens keep it as side drawer */
+@media(min-width:600px){
+  .history-drawer{
+    left:auto; right:-420px; bottom:0; top:0; height:auto;
+    width:420px; max-width:95vw; border-radius:0;
+    border-left:1px solid #2a2a2a; border-top:none;
+    transition:right .35s cubic-bezier(.4,0,.2,1);
+  }
+  .history-drawer.open{ right:0; bottom:0; }
+}
 
 .drawer-header{
-  padding:20px 22px; border-bottom:1px solid #1f1f1f;
+  padding:16px 18px; border-bottom:1px solid #1f1f1f;
   display:flex; align-items:center; justify-content:space-between;
-  background:#111;
+  background:#111; border-radius:22px 22px 0 0;
 }
-.drawer-header h3{ font-family:'Syne',sans-serif; color:#FF6B35; font-size:18px; }
+@media(min-width:600px){ .drawer-header{ border-radius:0; } }
+.drawer-header h3{ font-family:'Syne',sans-serif; color:#FF6B35; font-size:17px; }
+/* drag handle on mobile */
+.drawer-handle{
+  width:40px; height:4px; background:#333; border-radius:4px;
+  margin:10px auto 0; display:block;
+}
+@media(min-width:600px){ .drawer-handle{ display:none; } }
+
 .drawer-close{
-  width:34px; height:34px; border-radius:10px;
+  width:32px; height:32px; border-radius:10px;
   background:#1f1f1f; border:1px solid #333;
-  color:#aaa; font-size:18px; cursor:pointer;
-  display:flex; align-items:center; justify-content:center;
-  transition:.2s;
+  color:#aaa; font-size:17px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; transition:.2s;
 }
-.drawer-close:hover{ background:#FF6B35; color:white; border-color:#FF6B35; }
+.drawer-close:active{ background:#FF6B35; color:white; border-color:#FF6B35; }
 
 .drawer-filter{
-  padding:12px 18px; border-bottom:1px solid #1a1a1a;
-  display:flex; gap:8px; flex-wrap:wrap;
+  padding:10px 14px; border-bottom:1px solid #1a1a1a;
+  display:flex; gap:7px; overflow-x:auto; -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
 }
+.drawer-filter::-webkit-scrollbar{ display:none; }
 .filter-chip{
-  padding:5px 14px; border-radius:20px; font-size:12px; font-weight:600;
+  padding:5px 13px; border-radius:20px; font-size:12px; font-weight:600;
   border:1px solid #2c2c2c; background:#161616; color:#888;
-  cursor:pointer; transition:.2s;
+  cursor:pointer; transition:.2s; white-space:nowrap; flex-shrink:0;
 }
 .filter-chip.active{ border-color:#FF6B35; color:#FF6B35; background:#1a0f09; }
 
-.drawer-search{
-  padding:10px 18px; border-bottom:1px solid #1a1a1a;
-}
+.drawer-search{ padding:9px 14px; border-bottom:1px solid #1a1a1a; }
 .drawer-search input{
   width:100%; background:#161616; border:1px solid #2a2a2a;
-  color:white; padding:9px 14px; border-radius:12px;
+  color:white; padding:9px 13px; border-radius:12px;
   outline:none; font-size:13px; font-family:'Plus Jakarta Sans',sans-serif;
 }
 .drawer-search input:focus{ border-color:#FF6B35; }
 .drawer-search input::placeholder{ color:#555; }
 
 .drawer-body{
-  flex:1; overflow-y:auto; padding:14px;
+  flex:1; overflow-y:auto; padding:12px;
   scrollbar-width:thin; scrollbar-color:#2a2a2a transparent;
+  -webkit-overflow-scrolling:touch;
 }
 
-.history-empty{
-  text-align:center; padding:50px 20px;
-  color:#555; font-size:14px; line-height:2;
-}
-.history-empty div{ font-size:48px; margin-bottom:12px; }
+.history-empty{ text-align:center; padding:40px 20px; color:#555; font-size:13px; line-height:2; }
+.history-empty div{ font-size:44px; margin-bottom:10px; }
 
 .history-item{
   background:#141414; border:1px solid #222;
-  border-radius:16px; padding:16px; margin-bottom:12px;
+  border-radius:14px; padding:14px; margin-bottom:10px;
   cursor:pointer; transition:.2s; position:relative;
 }
-.history-item:hover{ border-color:#FF6B35; background:#1a1209; }
-.history-item:hover .hi-replay{ opacity:1; }
+.history-item:active{ border-color:#FF6B35; background:#1a1209; }
 
-.hi-meta{
-  display:flex; align-items:center; gap:8px; margin-bottom:10px;
-}
+.hi-meta{ display:flex; align-items:center; gap:7px; margin-bottom:9px; }
 .hi-type{
-  font-size:10px; font-weight:700; padding:3px 10px;
+  font-size:10px; font-weight:700; padding:3px 9px;
   border-radius:20px; letter-spacing:.5px;
 }
 .hi-type.pdf{ background:#1a0f09; color:#FF6B35; border:1px solid #3a1f0e; }
@@ -262,47 +303,47 @@ li{ margin:5px 0; line-height:1.7; }
 .hi-time{ font-size:11px; color:#555; margin-left:auto; }
 
 .hi-q{
-  font-size:13px; color:#ddd; font-weight:600; margin-bottom:8px;
-  line-height:1.5;
-  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;
-  overflow:hidden;
+  font-size:13px; color:#ddd; font-weight:600; margin-bottom:7px; line-height:1.5;
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
 }
 .hi-a{
   font-size:12px; color:#666; line-height:1.6;
-  display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical;
-  overflow:hidden;
+  display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;
 }
-
 .hi-replay{
-  position:absolute; top:12px; right:12px;
+  margin-top:10px; display:inline-block;
   background:#FF6B35; color:white; border:none;
-  padding:5px 12px; border-radius:10px; font-size:11px; font-weight:700;
-  cursor:pointer; opacity:0; transition:.2s;
+  padding:5px 12px; border-radius:10px; font-size:11px; font-weight:700; cursor:pointer;
 }
 
-.drawer-footer{
-  padding:14px 18px; border-top:1px solid #1a1a1a;
-  display:flex; gap:10px;
-}
+.drawer-footer{ padding:12px 14px; border-top:1px solid #1a1a1a; }
 .clear-btn{
-  flex:1; background:#1a1a1a; border:1px solid #333;
-  color:#888; padding:10px; border-radius:12px;
+  width:100%; background:#1a1a1a; border:1px solid #333;
+  color:#888; padding:11px; border-radius:12px;
   font-size:13px; cursor:pointer; transition:.2s; font-weight:600;
 }
-.clear-btn:hover{ border-color:red; color:#ff6b6b; background:#1a0a0a; }
+.clear-btn:active{ border-color:red; color:#ff6b6b; background:#1a0a0a; }
 
-/* ── Mode Toggle ─────────────────────────────────── */
+/* ── Mode Toggle ── */
 .mode-toggle{
   display:flex; gap:0; background:#161616; border:1px solid #2c2c2c;
-  border-radius:12px; overflow:hidden; margin-bottom:14px;
+  border-radius:12px; overflow:hidden; margin-bottom:13px;
 }
 .mode-btn{
-  flex:1; padding:10px 14px; font-size:13px; font-weight:700;
+  flex:1; padding:10px 12px; font-size:13px; font-weight:700;
   border:none; background:transparent; color:#666; cursor:pointer;
-  transition:.2s; display:flex; align-items:center; justify-content:center; gap:6px;
+  transition:.2s; display:flex; align-items:center; justify-content:center; gap:5px;
+  touch-action:manipulation;
 }
 .mode-btn.active{ background:#FF6B35; color:white; }
-.mode-btn:not(.active):hover{ color:#FF6B35; }
+
+/* ── Explain button full width on mobile ── */
+#explainBtn{ width:100%; margin:12px 0; }
+
+/* ── Scrollbar ── */
+.chat-box::-webkit-scrollbar{ width:3px; }
+.chat-box::-webkit-scrollbar-track{ background:transparent; }
+.chat-box::-webkit-scrollbar-thumb{ background:#2a2a2a; border-radius:3px; }
 </style>
 </head>
 <body>
@@ -310,12 +351,12 @@ li{ margin:5px 0; line-height:1.7; }
 <!-- API Key Modal -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal">
-    <div style="font-size:50px;margin-bottom:12px">🔑</div>
+    <div style="font-size:46px;margin-bottom:10px">🔑</div>
     <h2>Enter Your Groq API Key</h2>
     <p>Groq is completely <strong style="color:#4ade80">FREE</strong> and super fast!</p>
     <ol>
-      <li>👉 <a href="https://couples009.github.io/GURU-JI-AI/" target="_blank"><strong>COPY THIS API KEY </strong></a>    OPEN IT </li>
-     <li>Copy the key and paste it below</li>
+      <li>👉 <a href="https://couples009.github.io/GURU-JI-AI/" target="_blank"><strong>COPY THIS API KEY</strong></a> — OPEN IT</li>
+      <li>Copy the key and paste it below</li>
     </ol>
     <input class="api-input" id="apiKeyInput" type="password" placeholder="gsk_... (Paste your Groq API Key here)" onkeydown="if(event.key==='Enter')saveKey()">
     <button class="main-btn" style="width:100%" onclick="saveKey()">✅ Save & Get Started</button>
@@ -328,31 +369,32 @@ li{ margin:5px 0; line-height:1.7; }
     <h1>AI GURU JI</h1>
     <p>made by--TANUSH 🔥</p>
   </div>
-  <div class="header-right" style="display:flex;gap:10px;align-items:center">
+  <div class="header-right">
     <button class="history-btn" onclick="openHistory()">
-      🕐 History <span class="history-badge" id="historyCount">0</span>
+      🕐 <span class="history-badge" id="historyCount">0</span>
     </button>
-    <button class="key-badge connected" id="keyBadge" onclick="changeKey()">🟢 Groq Connected</button>
+    <button class="key-badge connected" id="keyBadge" onclick="changeKey()">🟢 Connected</button>
   </div>
 </div>
 
-<!-- History Drawer -->
+<!-- History Drawer (bottom sheet on mobile) -->
 <div class="drawer-overlay" id="drawerOverlay" onclick="closeHistory()"></div>
 <div class="history-drawer" id="historyDrawer">
+  <span class="drawer-handle"></span>
   <div class="drawer-header">
     <div>
       <h3>📖 Chat History</h3>
-      <div style="font-size:12px;color:#555;margin-top:3px">Tumhare saare sawaal &amp; jawab</div>
+      <div style="font-size:11px;color:#555;margin-top:2px">Tumhare saare sawaal &amp; jawab</div>
     </div>
     <button class="drawer-close" onclick="closeHistory()">✕</button>
   </div>
   <div class="drawer-filter">
     <button class="filter-chip active" onclick="filterHistory('all',this)">🔢 All</button>
-    <button class="filter-chip" onclick="filterHistory('pdf',this)">📄 PDF Questions</button>
+    <button class="filter-chip" onclick="filterHistory('pdf',this)">📄 PDF</button>
     <button class="filter-chip" onclick="filterHistory('general',this)">🌐 General</button>
   </div>
   <div class="drawer-search">
-    <input type="text" id="historySearch" placeholder="🔍 Search in history..." oninput="renderHistory()">
+    <input type="text" id="historySearch" placeholder="🔍 Search history..." oninput="renderHistory()">
   </div>
   <div class="drawer-body" id="drawerBody">
     <div class="history-empty">
@@ -368,7 +410,7 @@ li{ margin:5px 0; line-height:1.7; }
 <div class="container">
 
   <div class="upload-box" id="uploadBox" onclick="fileInput.click()">
-    <div style="font-size:70px">📚</div>
+    <div style="font-size:60px">📚</div>
     <h2>Upload Your PDF</h2>
     <p>Normal PDF ✅ &nbsp;|&nbsp; Scanned / Camera PDF ✅ (OCR supported)</p>
     <button class="main-btn" onclick="event.stopPropagation();fileInput.click()">📄 Choose PDF</button>
@@ -377,7 +419,7 @@ li{ margin:5px 0; line-height:1.7; }
   <div id="mainApp" style="display:none">
     <div class="top-bar">
       <div class="pdf-info" id="pdfInfo">📄 Loading...</div>
-      <button class="reupload-btn" onclick="reuploadPDF()">🔄 Upload New PDF</button>
+      <button class="reupload-btn" onclick="reuploadPDF()">🔄 New PDF</button>
     </div>
 
     <!-- OCR Progress -->
@@ -522,7 +564,7 @@ function setMode(mode) {
   const inp = document.getElementById('userInput');
   inp.placeholder = mode === 'pdf'
     ? '📄 PDF ke baare mein kuch poochho...'
-    : '🌐 Kuch bhi poochho — maths, science, history, GK, general knowledge...';
+    : '🌐 Kuch bhi poochho — maths, science, history, GK...';
 }
 
 // ─── Key Management ───────────────────────────────────────────────────────────
@@ -537,7 +579,7 @@ function saveKey() {
   try { sessionStorage.setItem('groq_key', k); } catch(e) {}
   document.getElementById('modalOverlay').style.display = 'none';
   document.getElementById('keyBadge').className = 'key-badge connected';
-  document.getElementById('keyBadge').textContent = '🟢 Groq Connected';
+  document.getElementById('keyBadge').textContent = '🟢 Connected';
 }
 
 function changeKey() {
@@ -553,7 +595,7 @@ window.onload = () => {
     GROQ_KEY = saved;
     document.getElementById('modalOverlay').style.display = 'none';
     document.getElementById('keyBadge').className = 'key-badge connected';
-    document.getElementById('keyBadge').textContent = '🟢 Groq Connected';
+    document.getElementById('keyBadge').textContent = '🟢 Connected';
   }
   updateHistoryBadge();
 };
@@ -585,7 +627,7 @@ fileInput.addEventListener('change', async (e) => {
     hideLoader();
 
     document.getElementById('pdfInfo').innerHTML =
-      `📄 <span>${file.name}</span> — <span>${totalPages} pages</span> | <span>${pdfText.split(' ').length} words</span>${usedOCR ? ' | <span>🔍 OCR Used</span>' : ''}`;
+      `📄 <span>${file.name}</span> — <span>${totalPages} pg</span> | <span>${pdfText.split(' ').length} words</span>${usedOCR ? ' | <span>🔍 OCR</span>' : ''}`;
 
     addMessage('assistant', `# ✅ PDF Loaded Successfully!
 
@@ -623,7 +665,6 @@ async function extractPDFText(file) {
   let pages = [], fullText = "";
   let totalChars = 0;
 
-  // First pass: normal text extraction
   for (let i = 1; i <= pdf.numPages; i++) {
     const page = await pdf.getPage(i);
     const content = await page.getTextContent();
@@ -633,18 +674,15 @@ async function extractPDFText(file) {
     totalChars += text.length;
   }
 
-  // If avg chars/page < 80 → scanned/image PDF → use Groq Vision OCR
   const isScanned = (totalChars / pdf.numPages) < 80;
   if (!isScanned) return { pages, fullText, usedOCR: false };
 
-  // ── Groq Vision OCR (fast, parallel) ─────────────────────────────────────
   const ocrEl = document.getElementById('ocrProgress');
   const fillEl = document.getElementById('ocrBarFill');
   const statusEl = document.getElementById('ocrStatus');
   ocrEl.style.display = 'block';
   hideLoader();
 
-  // Render all pages to JPEG base64
   const pageImages = [];
   for (let i = 1; i <= pdf.numPages; i++) {
     statusEl.textContent = `Page ${i}/${pdf.numPages} rendering...`;
@@ -658,7 +696,6 @@ async function extractPDFText(file) {
     pageImages.push(canvas.toDataURL('image/jpeg', 0.85).split(',')[1]);
   }
 
-  // Send batches of 5 pages in parallel to Groq Vision
   pages = []; fullText = "";
   const BATCH = 5;
   let done = 0;
@@ -666,7 +703,7 @@ async function extractPDFText(file) {
   for (let b = 0; b < pageImages.length; b += BATCH) {
     const batch = pageImages.slice(b, b + BATCH);
     const nums = batch.map((_, k) => b + k + 1);
-    statusEl.textContent = `Pages ${nums[0]}–${nums[nums.length-1]} / ${pdf.numPages} — Extracting text via Groq Vision... ⚡`;
+    statusEl.textContent = `Pages ${nums[0]}–${nums[nums.length-1]} / ${pdf.numPages} — Extracting via Groq Vision... ⚡`;
 
     const results = await Promise.all(batch.map((img, idx) =>
       groqVisionOCR(img, nums[idx])
@@ -684,7 +721,6 @@ async function extractPDFText(file) {
   return { pages, fullText, usedOCR: true };
 }
 
-// Groq Vision OCR for a single page image
 async function groqVisionOCR(base64Jpeg, pageNum) {
   try {
     const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
@@ -754,8 +790,6 @@ FORMAT:
 - Use ## headings for each section
 - Bold important points`;
 
-const SYSTEM = SYSTEM_PDF; // default, overridden in askAI
-
 async function askAI(userPrompt, mode) {
   const systemPrompt = (mode === 'general') ? SYSTEM_GENERAL : SYSTEM_PDF;
   const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
@@ -791,9 +825,6 @@ async function askAI(userPrompt, mode) {
 
   throw new Error('No response received, please try again.');
 }
-
-
-// askAI defined above with mode support
 
 // ─── Explain Full PDF ─────────────────────────────────────────────────────────
 async function explainPDF() {
@@ -844,13 +875,11 @@ async function askQuestion() {
   let prompt, mode;
 
   if (currentMode === 'general' || !pdfText.trim()) {
-    // General mode — answer anything smartly
     mode = 'general';
     prompt = `Student Question: ${q}
 
 Answer this question thoroughly like a great teacher. Show all steps for maths. Give examples. Be clear and helpful.`;
   } else {
-    // PDF mode
     mode = 'pdf';
     const chunk = pdfText.substring(0, 10000);
     prompt = `My PDF content:
@@ -894,7 +923,7 @@ function addMessage(role, text) {
     msg.innerHTML = `
       <div class="ai-head">
         <div class="ai-avatar">🎓</div>
-        <div style="font-size:13px;color:#FF6B35;font-weight:700">Guru Ji</div>
+        <div style="font-size:12px;color:#FF6B35;font-weight:700">Guru Ji</div>
         <button class="speak-btn" onclick="speakText(document.getElementById('${id}').innerText, this)">🔊 Suno</button>
       </div>
       <div class="bubble ai-bubble" id="${id}">${formatText(text)}</div>`;
@@ -980,7 +1009,6 @@ function speakText(text, btnEl) {
     if (!sentence) { i++; speakNext(); return; }
 
     const u = new SpeechSynthesisUtterance(sentence);
-
     u.voice = getVoice();
     u.lang  = 'en-IN';
     u.rate  = 0.92;
