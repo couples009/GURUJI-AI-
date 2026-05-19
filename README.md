@@ -1,1 +1,0 @@
-# GURUJI-AI-
